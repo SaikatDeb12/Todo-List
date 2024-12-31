@@ -17,9 +17,12 @@ addBtn.addEventListener('click', () => {
         p.innerHTML=task.value.trim();
         // console.log(p);
         list.appendChild(p);
+        
+        // saving to local storage
+        saveLocalTodos(task.value);
         document.querySelector('.input-text').value='';
         
-        saveLocalTodos(p.innerHTML);
+
         //creating a edit button
         const edit=document.createElement('button');
         edit.innerHTML='Edit';
@@ -63,6 +66,8 @@ function handleActions(e){
         //very IMP
         taskList.removeChild(e.target.parentElement);
 
+        deleteLocalTodo(e.target.parentElement);
+
         // If removing a task that's being edited, reset the edit mode
         if (editingTask === e.target.parentElement) {
             editingTask = null;
@@ -84,12 +89,75 @@ function handleActions(e){
 }
 
 const saveLocalTodos = (todo) =>{
-    let todos=[todo];
-    console.log(todos);
-
+    let todos;
+    if(localStorage.getItem("todos") === null){
+        todos=[];
+    }
+    else{
+        todos=JSON.parse(localStorage.getItem("todos"));
+    }
+    todos.push(todo);
+    localStorage.setItem("todos", JSON.stringify(todos));
 }
 
+const getLocalTodos = ()=> {
+    //to extract the list from LocalStorage and show the on the screen
+    let todos;
+    if(localStorage.getItem("todos") === null){
+        todos=[];
+    }
+    else{
+        todos=JSON.parse(localStorage.getItem("todos"));
+        todos.forEach(todoTasks => {
+            console.log(todoTasks);
+            const list=document.createElement('li');
+            list.className='taskName';
+            const p = document.createElement('p');
+            p.innerHTML=todoTasks;
+            // console.log(p);
+            list.appendChild(p);
+        
+            //creating a edit button
+            const edit=document.createElement('button');
+            edit.innerHTML='Edit';
+            edit.classList='edit-btn'
+            edit.addEventListener('click', ()=> {
+                console.log("edit");
+            })
+            list.appendChild(edit);
+        
+            //creating a remove button
+            const remove=document.createElement("button");
+            remove.classList='remove-btn';
+            remove.innerHTML='Remove';
+            remove.addEventListener('click', ()=>{
+                console.log("remove");
+            })
+            list.appendChild(remove);
+            
+            taskList.appendChild(list);
+            
+        });
+    }
+}
+
+const deleteLocalTodo = (todoTask) =>{
+    let todos;
+    if(localStorage.getItem("todos") === null){
+        todos=[];
+    }
+    else{
+        todos=JSON.parse(localStorage.getItem("todos"));
+        // console.log(todoTask.children[0].innerHTML);
+        const taskName=todoTask.children[0].innerHTML;
+        const taskIndex=todos.indexOf(taskName);
+        console.log(taskIndex);
+        todos.splice(taskIndex, 1);
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }
+}
+
+document.addEventListener('DOMContentLoaded', getLocalTodos);
 taskList.addEventListener('click', handleActions);
-
-
+saveLocalTodos
 
