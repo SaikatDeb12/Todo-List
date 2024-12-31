@@ -94,10 +94,6 @@ function handleActions(e){
         
         task.value=currentText;
         addBtn.textContent="Edit";
-        
-        // console.log(currentText);
-        // editLocalTodo(currentText);
-        // task.value=e.target.previousElementSibling.innerHTML;
     }
 }
 
@@ -127,7 +123,6 @@ const getLocalTodos = ()=> {
             list.className='taskName';
             const p = document.createElement('p');
             p.innerHTML=todoTasks;
-            // console.log(p);
             list.appendChild(p);
         
             //creating a edit button
@@ -179,5 +174,5 @@ const editLocalTodo = (todoTask) =>{
 
 document.addEventListener('DOMContentLoaded', getLocalTodos);
 taskList.addEventListener('click', handleActions);
-saveLocalTodos
+
 
