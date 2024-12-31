@@ -46,9 +46,20 @@ addBtn.addEventListener('click', () => {
     }
     else{
         if(editingTask){
-            editingTask.querySelector('p').textContent = task.value.trim();
-            // Reset edit mode
-            editingTask = null;
+            const oldText = editingTask.querySelector('p').textContent;
+            const newText = task.value.trim();
+            
+            // Update the UI
+            editingTask.querySelector('p').textContent = newText;
+            
+            // Update localStorage
+            let todos = JSON.parse(localStorage.getItem("todos"));
+            const taskIndex = todos.indexOf(oldText);
+            if(taskIndex !== -1) {
+                todos[taskIndex] = newText;
+                localStorage.setItem("todos", JSON.stringify(todos));
+            }
+            
             addBtn.innerHTML = "Add";
         }
     }
@@ -84,6 +95,8 @@ function handleActions(e){
         task.value=currentText;
         addBtn.textContent="Edit";
         
+        // console.log(currentText);
+        // editLocalTodo(currentText);
         // task.value=e.target.previousElementSibling.innerHTML;
     }
 }
@@ -155,6 +168,13 @@ const deleteLocalTodo = (todoTask) =>{
         todos.splice(taskIndex, 1);
         localStorage.setItem("todos", JSON.stringify(todos));
     }
+}
+
+const editLocalTodo = (todoTask) =>{
+    let todos=JSON.parse(localStorage.getItem("todos"));
+    let taskIndex=todos.indexOf(todoTask);
+    todos[taskIndex]=task.value;
+    localStorage.setItem("todos", JSON.stringify(todos));
 }
 
 document.addEventListener('DOMContentLoaded', getLocalTodos);
