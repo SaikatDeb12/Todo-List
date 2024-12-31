@@ -8,7 +8,6 @@ addBtn.addEventListener('click', () => {
     // console.log(addBtn.innerHTML);
     if(task.value==''){
         alert("Add a task!");
-        console.log("Khuda hafiz")
         return;
     }
     if(addBtn.innerHTML=="Add"){
